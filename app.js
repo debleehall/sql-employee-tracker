@@ -34,7 +34,24 @@ function promptUser() {
       ],
     },
   ])
-
+  .then((answers) => {
+    var endProgram = false;
+    switch (answers.action) {
+      case "view all departments": {
+        const sql = `SELECT * FROM department;`;
+        db.query(sql, (err, results) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log("\n");
+          console.table(results);
+          console.log("\n");
+          promptUser();
+        });
+        break;
+      }
+    }
+  })
 }
 
 promptUser();
