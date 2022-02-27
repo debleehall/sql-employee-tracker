@@ -37,6 +37,8 @@ function promptUser() {
   .then((answers) => {
     var endProgram = false;
     switch (answers.action) {
+
+// ALL DEPARTMENTS
       case "view all departments": {
         const sql = `SELECT * FROM department;`;
         db.query(sql, (err, results) => {
@@ -50,6 +52,8 @@ function promptUser() {
         });
         break;
       }
+
+// ALL ROLES
       case "view all roles": {
         const sql = `SELECT * FROM employee_role;`;
         db.query(sql, (err, results) =>{
@@ -76,8 +80,40 @@ function promptUser() {
         });
         break;
       }
+
+// ADD DEPARTMENT
+      case "add department": {
+        inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "department",
+            message: "name of department:",
+          },
+        ])
+        .then(({ department }) => {
+          const sql = `INSERT INTO department (name) VALUES (?)`;
+          const params = [department];
+          db.query(sql, params, (err, results) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(`added ${department} to the database`);
+              promptUser();
+            }
+          });
+        });
+        break;
+      }
+      
     }
   })
 }
 
 promptUser();
+
+// "add department"
+// "add new role"
+// "add new employee"
+// "update an employee's role"
+// "exit"
