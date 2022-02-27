@@ -63,6 +63,19 @@ function promptUser() {
         });
         break;
       }
+      case "view all employees": {
+        const sql = `SELECT * FROM employee;`;
+        db.query(sql, (err, results) =>{
+          if (err) {
+            console.log(err);
+          }
+          console.log("\n");
+          console.table(results);
+          console.log("\n");
+          promptUser();
+        });
+        break;
+      }
     }
   })
 }
