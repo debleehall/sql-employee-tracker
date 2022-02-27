@@ -50,6 +50,19 @@ function promptUser() {
         });
         break;
       }
+      case "view all roles": {
+        const sql = `SELECT * FROM employee_role;`;
+        db.query(sql, (err, results) =>{
+          if (err) {
+            console.log(err);
+          }
+          console.log("\n");
+          console.table(results);
+          console.log("\n");
+          promptUser();
+        });
+        break;
+      }
     }
   })
 }
