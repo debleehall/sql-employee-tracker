@@ -94,6 +94,7 @@ function promptUser() {
         .then(({ department }) => {
           const sql = `INSERT INTO department (name) VALUES (?)`;
           const params = [department];
+
           db.query(sql, params, (err, results) => {
             if (err) {
               console.log(err);
@@ -105,7 +106,62 @@ function promptUser() {
         });
         break;
       }
-      
+
+// ADD ROLE
+      case "add new role": {
+        inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "title",
+            message: "role title:",
+          },
+          {
+            type: "input",
+            name: "salary",
+            message: "role's salary:",
+          },
+        ])
+        .then((answers) => {
+          const { title, salary, department } = answers;
+          const sql = `INSERT INTO employee_role (title, salary, department_id) VALUES (?,?,?)`;
+          var id;
+          const deptsql = `SELECT * FROM department`;
+
+          db.query(deptsql, (err,results) => {
+            if (err) {
+              console.log(err);
+            } else {
+              inquirer
+              .prompt({
+                type: "list",
+                message: "Select department: ",
+                name: "department",
+                choices: results,
+              })
+              .then((input) => {
+                const { department } = input;
+                results.forEach((row) => {
+                  if (row.name === department) {
+                    id = row.id;
+                  }
+                });
+              const params = [title, salary, id];
+              db.query(sql, params, (err, results) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(`Added ${title} to the database`);
+                  promptUser();
+                }
+              });
+              });
+            }
+          });
+        });
+        break;
+      }
+      case "add new employee":
     }
   })
 }
